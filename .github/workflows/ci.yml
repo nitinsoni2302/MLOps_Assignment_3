@@ -1,0 +1,62 @@
+# .github/workflows/ci.yml
+
+name: MLOps CI/CD Pipeline
+
+# This workflow will be triggered on every push to the 'docker_ci' branch.
+on:
+  push:
+    branches:
+      - docker_ci
+
+# A workflow is made up of one or more jobs.
+jobs:
+  build_and_test_container:
+    # Specifies the runner environment (GitHub-hosted virtual machine).
+    runs-on: ubuntu-latest
+
+    # Steps define the sequence of tasks to be executed in the job.
+    steps:
+      - name: Checkout repository code
+        # This action checks out your repository's code onto the runner.
+        uses: actions/checkout@v4
+
+      - name: Set up Python environment and install dependencies
+        # Sets up a Python environment.
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9' # Ensure this matches your local Python version
+          cache: 'pip' # Caches pip dependencies for faster subsequent runs.
+      - run: pip install -r requirements.txt # Installs all packages listed in requirements.txt
+
+      - name: Run train.py to generate the model file
+        # This step executes your training script, which will create
+        # 'linear_regression_model.joblib' on the GitHub Actions runner.
+        run: python train.py
+
+      - name: List files after training (for debugging)
+        # Optional step to list files, useful for verifying the model file was created.
+        run: ls -lh
+
+      - name: Build the Docker image
+        # Builds your Docker image using the Dockerfile.
+        # The '.' refers to the current directory (your checked-out repository).
+        # The -t flag tags the image with your Docker Hub username and image name.
+        run: docker build -t nitinsoni2302/mlops_housing_model:latest .
+
+      - name: Run the Docker container and execute predict.py for verification
+        # Runs the newly built Docker image and executes predict.py inside it.
+        # If predict.py exits with an error (e.g., if the model isn't found),
+        # this step will fail, and thus the entire workflow will fail.
+        run: docker run your_dockerhub_model:latest python predict.py
+
+      - name: Log in to Docker Hub
+        # Uses a predefined action to log into Docker Hub.
+        # Credentials are pulled from GitHub Secrets (defined in Part E).
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }} # Or ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Push the Docker image to Docker Hub
+        # Pushes the locally built and tagged Docker image to Docker Hub.
+        run: docker push nitinsoni2302/mlops_housing_model:latest
