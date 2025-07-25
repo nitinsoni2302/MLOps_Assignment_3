@@ -47,7 +47,7 @@ jobs:
         # Runs the newly built Docker image and executes predict.py inside it.
         # If predict.py exits with an error (e.g., if the model isn't found),
         # this step will fail, and thus the entire workflow will fail.
-        run: docker run your_dockerhub_model:latest python predict.py
+        run: docker run nitinsoni2302/mlops_housing_model:latest python predict.py
 
       - name: Log in to Docker Hub
         # Uses a predefined action to log into Docker Hub.
