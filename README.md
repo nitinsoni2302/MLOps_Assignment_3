@@ -24,7 +24,7 @@ The goal is to build an end-to-end pipeline that ensures consistent model perfor
 
 ## 4. Pipeline Branches & Implementation Details
 
-### 4.1. `main` Branch: Model Training (Step 2)
+### 4.1. `main` Branch: Model Training
 
 The `main` branch serves as the foundation for the project. It contains the initial `train.py` script responsible for:
 * Loading the California Housing dataset.
@@ -36,11 +36,11 @@ The `main` branch serves as the foundation for the project. It contains the init
 **Original Sklearn Model Performance:**
 * **Test R^2 score:** 0.5758
 
-### 4.2. `dev` Branch: Feature Development (Step 3)
+### 4.2. `dev` Branch: Feature Development
 
 The `dev` branch is used for active development and new feature implementation. Changes are developed here and then merged into `main` after review. For this assignment, `dev` was used to integrate the `requirements.txt` changes for PyTorch libraries.
 
-### 4.3. `docker_ci` Branch: CI/CD Pipeline with Docker & GitHub Actions (Step 4)
+### 4.3. `docker_ci` Branch: CI/CD Pipeline with Docker & GitHub Actions
 
 The `docker_ci` branch implements the continuous integration and continuous deployment pipeline.
 * **`Dockerfile`**: Defines the environment for containerizing the model, ensuring consistent execution.
@@ -49,7 +49,7 @@ The `docker_ci` branch implements the continuous integration and continuous depl
     * Runs tests to verify the image (by executing `predict.py` within the container).
     * Pushes the built image to Docker Hub upon successful completion.
 
-### 4.4. `quantization` Branch: Model Conversion & Optimization (Step 4)
+### 4.4. `quantization` Branch: Model Conversion & Optimization
 
 The `quantization` branch focuses on model optimization. The `quantize.py` script performs the following:
 * Loads the trained `scikit-learn` model.
