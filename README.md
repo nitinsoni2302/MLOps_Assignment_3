@@ -24,7 +24,7 @@ The goal is to build an end-to-end pipeline that ensures consistent model perfor
 
 ## 4. Pipeline Branches & Implementation Details
 
-### 4.1. `main` Branch: Model Training
+### 4.1. `dev` Branch: Model Training
 
 The `main` branch serves as the foundation for the project. It contains the initial `train.py` script responsible for:
 * Loading the California Housing dataset.
